@@ -577,7 +577,7 @@ def trigger_build_import(data, base_url, token):
 def write_conf_fragment_file(conf):
     """Write a config fragment file into a temporary one."""
     with io.open(KCONFIG_TMPFILE, mode="a") as kfile, \
-            io.open(conf) as conf_file:
+            io.open(conf, mode="r+b") as conf_file:
         kfile.write(u"\n# fragment from: {:s}\n".format(conf))
         for line in conf_file:
             kfile.write(unicode(line, "utf-8"))
@@ -694,13 +694,13 @@ def check_and_set_environment(build_cfg):
             defs = conf.split("+")
 
             for conf in defs:
-                if os.path.exists(CONFIG_PATH.format(build_cfg, conf)):
+                if os.path.isfile(CONFIG_PATH.format(build_cfg, conf)):
                     build_cfg.defconfig = conf
                 elif any([conf == "defconfig",
                           conf == "tinyconfig",
                           re.match(r"all(\w*)config", conf)]):
                     build_cfg.defconfig = conf
-                elif os.path.exists(conf):
+                elif os.path.isfile(conf):
                     write_conf_fragment_file(conf)
                     frag_names.append(
                         os.path.basename(os.path.splitext(conf)[0]))
