@@ -157,7 +157,7 @@ def do_make(build_cfg, target=None, log=False, cmd_vars=None):
         make_vars = " ".join(_create_var_string())
 
     make_cmd = "make {0:s} {1:s}".format(make_vars.strip(), make_args.strip())
-    logger.debug("Make command is: %s", make_cmd)
+    logger.info("Make command is: %s", make_cmd)
 
     make_out = None
     if log:
