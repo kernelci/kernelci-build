@@ -68,7 +68,7 @@ ENV_VARIABLES = [
 # them.
 GIT_VARIABLES_AND_COMMANDS = {
     "git_commit": r"git log -n1 --format=%H",
-    "git_url": "git config --get remote.origin.url",
+    "git_url": "git config --get remote.origin.url | cat",
     "git_branch": "git rev-parse --abbrev-ref HEAD",
     "git_describe_v": r"git describe --match=v[34]\*",
     "git_describe": "git describe"
