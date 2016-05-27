@@ -132,16 +132,16 @@ def do_make(build_cfg, target=None, log=False, cmd_vars=None):
     make_args += " ARCH={0.arch:s}".format(build_cfg)
 
     if build_cfg.cross_compile:
-        make_args += " CROSS_COMPILE={0.cross_compile:s} ".format(build_cfg)
+        make_args += " CROSS_COMPILE={0.cross_compile:s}".format(build_cfg)
 
     if build_cfg.ccache:
         prefix = ""
         if build_cfg.cross_compile:
             prefix = build_cfg.cross_compile
-        make_args += " CC=\"ccache {:s}gcc\" ".format(prefix)
+        make_args += " CC=\"ccache {:s}gcc\"".format(prefix)
 
     if build_cfg.kbuild_output:
-        make_args += " O={0.kbuild_output:s} ".format(build_cfg)
+        make_args += " O={0.kbuild_output:s}".format(build_cfg)
 
     if target:
         make_args += target
