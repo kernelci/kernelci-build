@@ -40,7 +40,7 @@ SEND_RETRIES = 3
 
 # List of architectures on their cross-compiler.
 CROSS_COMPILERS = {
-    "arm": "arm-linux-gnueabi-",
+    "arm": "arm-linux-gnueabihf-",
     "arm64": "aarch64-linux-gnu-",
     "i386": None,
     "x86": None,
