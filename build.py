@@ -46,7 +46,22 @@ build_log_f = None
 
 def usage():
     print "Usage:", sys.argv[0], "[options] [make target]"
-    
+
+def do_post_retry(url=None, data=None, headers=None, files=None):
+    retry = True
+    while retry:
+        try:
+            response = requests.post(url, data=data, headers=headers, files=files)
+            if str(response.status_code)[:1] != "2":
+                raise Exception(response.content)
+            else:
+                return response.content
+                retry = False
+        except Exception as e:
+            print "ERROR: failed to publish"
+            print e
+            time.sleep(10)
+
 def do_make(target=None, log=False):
     make_args = ''
     make_args += "-j%d -k " %make_threads
@@ -307,8 +322,12 @@ if install:
                 kimages.append(os.path.join(root, filename))
                 shutil.copy(os.path.join(root, filename), install_path)
 
-    if os.path.isfile(os.path.join(kbuild_output, "vmlinux")):
-        shutil.copy(os.path.join(kbuild_output, "vmlinux"), install_path)
+    vmlinux_file = os.path.join(kbuild_output, "vmlinux")
+    if os.path.isfile(vmlinux_file):
+        print "found vmlinux, parsing sizes"
+        import elf
+        bmeta.update(elf.read(vmlinux_file))
+        bmeta["vmlinux_file_size"] = os.stat(vmlinux_file).st_size
         bmeta["vmlinux_file"] = "vmlinux"
 
     if len(kimages) == 1:
@@ -448,23 +467,13 @@ if install:
                 count += 1
         upload_url = urljoin(url, '/upload')
         build_url = urljoin(url, '/build')
-        retry = True
-        while retry:
-            response = requests.post(upload_url, data=upload_data, headers=headers, files=artifacts)
-            if response.status_code != 200:
-                print "ERROR: failed to publish"
-                print response.content
-                time.sleep(10)
-            else:
-                print "INFO: published artifacts"
-                for publish_result in json.loads(response.content)["result"]:
-                    print "%s/%s" % (publish_path, publish_result['filename'])
-                print "INFO: triggering build"
-                headers['Content-Type'] = 'application/json'
-                response = requests.post(
-                    build_url, data=json.dumps(build_data), headers=headers)
-                print response.status_code
-                retry = False
+        publish_response = do_post_retry(url=upload_url, data=upload_data, headers=headers, files=artifacts)
+        print "INFO: published artifacts"
+        for publish_result in json.loads(publish_response)["result"]:
+            print "%s/%s" % (publish_path, publish_result['filename'])
+        print "INFO: triggering build"
+        headers['Content-Type'] = 'application/json'
+        do_post_retry(url=build_url, data=json.dumps(build_data), headers=headers)
 
 #
 # Cleanup
