@@ -125,7 +125,7 @@ else:
     os.environ['ARCH'] = arch
 
 try:
-    opts, args = getopt.getopt(sys.argv[1:], "b:c:ip:s")
+    opts, args = getopt.getopt(sys.argv[1:], "b:c:ip:s:e")
 
 except getopt.GetoptError as err:
     print str(err) # will print something like "option -a not recognized"
@@ -171,6 +171,10 @@ for o, a in opts:
             print "ERROR: unable to load configuration file"
     if o == '-s':
         silent = not silent
+    if o == '-e':
+        url = os.environ['API']
+        token = os.environ['TOKEN']
+        publish = True
 
 # Default umask for file creation
 os.umask(022)
