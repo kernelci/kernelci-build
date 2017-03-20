@@ -465,6 +465,7 @@ if install:
         publish_path = os.path.join(job, git_branch, git_describe, arch, defconfig)
         headers['Authorization'] = token
         build_data['path'] = publish_path
+        build_data['file_server_resource'] = publish_path
         build_data['job'] = job
         build_data['kernel'] = git_describe
         build_data['git_branch'] = git_branch
