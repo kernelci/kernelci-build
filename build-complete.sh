@@ -49,7 +49,7 @@ if [[ BUILDS_FINISHED -eq 2 ]]; then
     echo "All builds have now finished, triggering testing..."
     # Tell the dashboard the job has finished build.
     echo "Build has now finished, reporting result to dashboard."
-    curl -X POST -H "Authorization: $EMAIL_AUTH_TOKEN" -H "Content-Type: application/json" -d '{"job": "'$TREE_NAME'", "kernel": "'$GIT_DESCRIBE'", "git_branch": "'$BRANCH'"}' https://api.kernelci.org/job
+    curl -X POST -H "Authorization: $EMAIL_AUTH_TOKEN" -H "Content-Type: application/json" -d '{"job": "'$TREE_NAME'", "kernel": "'$GIT_DESCRIBE'", "git_branch": "'$BRANCH'"}' https://staging-api.kernelci.org/job
     if [ $EMAIL != true ]; then
         echo "Not sending emails because EMAIL was false"
         exit 0
