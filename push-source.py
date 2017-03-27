@@ -4,10 +4,12 @@ import os
 import argparse
 import requests
 from urlparse import urljoin
+import time
 
 def do_post_retry(url=None, data=None, headers=None, files=None):
     retry = True
-    while retry:
+    count = 5
+    while retry and count >= 0:
         try:
             response = requests.post(url, data=data, headers=headers, files=files)
             if str(response.status_code)[:1] != "2":
@@ -18,6 +20,7 @@ def do_post_retry(url=None, data=None, headers=None, files=None):
         except Exception as e:
             print "ERROR: failed to publish"
             print e
+            count = count - 1
             time.sleep(10)
 
 parser = argparse.ArgumentParser()
