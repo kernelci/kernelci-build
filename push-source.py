@@ -22,6 +22,8 @@ def do_post_retry(url=None, data=None, headers=None, files=None):
             print e
             count = count - 1
             time.sleep(10)
+    print "Failed to push file"
+    exit(1)
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--token", help="KernelCI API Token")
