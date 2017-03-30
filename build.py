@@ -114,6 +114,7 @@ url = None
 token = None
 job = None
 boot_cmd = None
+use_environment = False
 
 # temp frag file: used to collect all kconfig fragments
 kconfig_tmpfile_fd, kconfig_tmpfile = tempfile.mkstemp(prefix='kconfig-')
@@ -172,9 +173,11 @@ for o, a in opts:
     if o == '-s':
         silent = not silent
     if o == '-e':
+        print "Reading build variables from environment"
         url = os.environ['API']
         token = os.environ['TOKEN']
         publish = True
+        use_environment = True
 
 # Default umask for file creation
 os.umask(022)
@@ -222,21 +225,31 @@ if ccache and len(ccache):
 else:
     ccache_dir = None
 
-# Misc. env overrides
-if os.environ.has_key('GIT_DESCRIBE'):
-    git_describe = os.environ['GIT_DESCRIBE']
-
-# Gather env/info
-if os.path.exists('.git'):
-    git_commit = subprocess.check_output('git log -n1 --format=%H', shell=True).strip()
-    git_url = subprocess.check_output('git config --get remote.origin.url |cat', shell=True).strip()
-    git_branch = subprocess.check_output('git rev-parse --abbrev-ref HEAD', shell=True).strip()
-    git_describe_v = subprocess.check_output('git describe --match=v[234]\*', shell=True).strip()
-    if not git_describe:
+# Gather info from environment variables
+if use_environment:
+    if os.environ.has_key('GIT_DESCRIBE'):
+        git_describe = os.environ['GIT_DESCRIBE']
+    if os.environ.has_key('GIT_DESCRIBE_VERBOSE'):
+        git_describe_v = os.environ['GIT_DESCRIBE_VERBOSE']
+    if os.environ.has_key('BRANCH'):
+        git_branch = os.environ['BRANCH']
+    if os.environ.has_key('COMMIT_ID'):
+        git_commit = os.environ['COMMIT_ID']
+    if os.environ.has_key('TREE'):
+        git_url = os.environ['TREE']
+else:
+    # Gather info from .git
+    if os.path.exists('.git'):
+        git_commit = subprocess.check_output('git log -n1 --format=%H', shell=True).strip()
+        git_url = subprocess.check_output('git config --get remote.origin.url |cat', shell=True).strip()
+        git_branch = subprocess.check_output('git rev-parse --abbrev-ref HEAD', shell=True).strip()
+        git_describe_v = subprocess.check_output('git describe --match=v[34]\*', shell=True).strip()
         git_describe = subprocess.check_output('git describe', shell=True).strip()
+    else:
+        print "Could not gather build information from environment or .git directory"
+        exit(1)
 
-if os.environ.has_key('BRANCH'):
-    git_branch = os.environ['BRANCH']
+
 
 cc_cmd = "gcc -v 2>&1"
 if cross_compile:
