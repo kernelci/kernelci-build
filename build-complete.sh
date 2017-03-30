@@ -1,9 +1,6 @@
 #!/bin/bash
 
-rm -rf *
-
-
-if [ $PUBLISH != true ]; then
+if [ "$PUBLISH" != "true" ]; then
   echo "Skipping publish step.  PUBLISH != true."
   exit 0
 fi
@@ -24,7 +21,7 @@ if [[ -z $GIT_DESCRIBE ]]; then
 fi
 
 if [[ -z $ARCH ]]; then
-  echo "ARCH_LIST not set.  Not publishing."
+  echo "ARCH not set.  Not publishing."
   exit 1
 fi
 
@@ -51,7 +48,7 @@ if [[ BUILDS_FINISHED -eq 4 ]]; then
     # Tell the dashboard the job has finished build.
     echo "Build has now finished, reporting result to dashboard."
     curl -X POST -H "Authorization: $EMAIL_AUTH_TOKEN" -H "Content-Type: application/json" -d '{"job": "'$TREE_NAME'", "kernel": "'$GIT_DESCRIBE'", "git_branch": "'$BRANCH'"}' ${API_URL}/job
-    if [ $EMAIL != true ]; then
+    if [ "$EMAIL" != "true" ]; then
         echo "Not sending emails because EMAIL was false"
         exit 0
     fi
@@ -168,7 +165,7 @@ if [[ BUILDS_FINISHED -eq 4 ]]; then
         echo "Sending results to LEG maintainers"
         curl -X POST -H "Authorization: $EMAIL_AUTH_TOKEN" -H "Content-Type: application/json" -d '{"job": "'$TREE_NAME'", "kernel": "'$GIT_DESCRIBE'", "git_branch": "'$BRANCH'", "build_report": 1, "send_to": ["linaro-acpi@lists.linaro.org", "graeme.gregory@linaro.org", "fellows@kernelci.org"], "format": ["txt", "html"], "delay": 10}' ${API_URL}/send
         curl -X POST -H "Authorization: $EMAIL_AUTH_TOKEN" -H "Content-Type: application/json" -d '{"job": "'$TREE_NAME'", "kernel": "'$GIT_DESCRIBE'", "git_branch": "'$BRANCH'", "boot_report": 1, "send_to": ["linaro-acpi@lists.linaro.org", "graeme.gregory@linaro.org", "fellows@kernelci.org"], "format": ["txt", "html"], "delay": 12600}' ${API_URL}/send
-    elif ["$TREE_NAME" == "drm-tip"]; then
+    elif [ "$TREE_NAME" == "drm-tip" ]; then
         echo "Sending results to DRM-TIP maintainers"
         curl -XPOST -H "Authorization: $EMAIL_AUTH_TOKEN" -H "Content-Type: application/json" -d '{"job": "'$TREE_NAME'", "kernel": "'$GIT_DESCRIBE'", "git_branch": "'$BRANCH'", "build_report": 1, "format": ["txt"], "send_to": ["daniel@ffwll.ch", "dri-devel@lists.freedesktop.org", "fellows@kernelci.org"], "delay": 60}' ${API_URL}/send
         curl -XPOST -H "Authorization: $EMAIL_AUTH_TOKEN" -H "Content-Type: application/json" -d '{"job": "'$TREE_NAME'", "kernel": "'$GIT_DESCRIBE'", "git_branch": "'$BRANCH'", "boot_report": 1, "format": ["txt"], "send_to": ["daniel@ffwll.ch", "dri-devel@lists.freedesktop.org", "fellows@kernelci.org"], "delay": 12600}' ${API_URL}/send
