@@ -243,7 +243,7 @@ else:
         git_commit = subprocess.check_output('git log -n1 --format=%H', shell=True).strip()
         git_url = subprocess.check_output('git config --get remote.origin.url |cat', shell=True).strip()
         git_branch = subprocess.check_output('git rev-parse --abbrev-ref HEAD', shell=True).strip()
-        git_describe_v = subprocess.check_output('git describe --match=v[34]\*', shell=True).strip()
+        git_describe_v = subprocess.check_output('git describe --match=v[234]\*', shell=True).strip()
         git_describe = subprocess.check_output('git describe', shell=True).strip()
     else:
         print "Could not gather build information from environment or .git directory"
