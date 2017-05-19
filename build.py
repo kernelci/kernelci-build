@@ -82,7 +82,6 @@ def do_make(target=None, log=False):
     make_cmd = 'make %s' %make_args
     if target == "oldconfig":
         make_cmd = 'yes "" |' + make_cmd
-    
     print make_cmd
 
     make_stdout = None
@@ -283,7 +282,7 @@ if defconfig or frag_names:
             print cmd
             subprocess.call(cmd, shell = True)
             do_make("oldconfig", log=True)
-            
+
 elif os.path.exists(dot_config):
     print "Re-using .config:", dot_config
     defconfig = "existing"
