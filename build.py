@@ -125,7 +125,7 @@ else:
     os.environ['ARCH'] = arch
 
 try:
-    opts, args = getopt.getopt(sys.argv[1:], "b:c:ip:s:e")
+    opts, args = getopt.getopt(sys.argv[1:], "b:c:ip:se")
 
 except getopt.GetoptError as err:
     print str(err) # will print something like "option -a not recognized"
