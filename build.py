@@ -239,6 +239,9 @@ if use_environment:
     git_describe = os.environ.get('GIT_DESCRIBE', git_describe)
     git_describe_v = os.environ.get('GIT_DESCRIBE_VERBOSE', git_describe_v)
 
+if os.environ.has_key('BRANCH'):
+    git_branch = os.environ['BRANCH']
+
 cc_cmd = "gcc -v 2>&1"
 if cross_compile:
     cc_cmd = "%sgcc -v 2>&1" %cross_compile
