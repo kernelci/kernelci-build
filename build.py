@@ -142,7 +142,7 @@ api = None
 token = None
 job = None
 boot_cmd = None
-use_git = False
+use_git = True
 use_environment = False
 
 # temp frag file: used to collect all kconfig fragments
