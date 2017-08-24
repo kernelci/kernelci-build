@@ -165,6 +165,15 @@ if [ ${TREE_NAME} = "lsk" ] || [ ${TREE_NAME} = "anders" ]; then
   fi
 fi
 
+# Ard specific tree and branch defconfigs.
+if [ ${TREE_NAME} = "ardb" ] && [ ${BRANCH} = "arm-kaslr-latest" ]; then
+  DEFCONFIG_LIST+="multi_v7_defconfig+CONFIG_RANDOMIZE_BASE=y "
+  DEFCONFIG_LIST+="multi_v7_defconfig+CONFIG_THUMB2_KERNEL=y+CONFIG_RANDOMIZE_BASE=y "
+  DEFCONFIG_LIST+="multi_v5_defconfig "
+  DEFCONFIG_LIST+="omap2plus_defconfig+CONFIG_RANDOMIZE_BASE=y "
+  DEFCONFIG_LIST+="omap2plus_defconfig "
+fi
+
 DEFCONFIG_ARRAY=( $DEFCONFIG_LIST )
 DEFCONFIG_COUNT=${#DEFCONFIG_ARRAY[@]}
 echo $DEFCONFIG_COUNT > ${ARCH}_defconfig.count
