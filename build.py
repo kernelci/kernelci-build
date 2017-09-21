@@ -59,6 +59,7 @@ cross_compilers = {
 
 # Defaults
 arch = "arm"
+cc_path = "gcc"
 cross_compile = cross_compilers[arch]
 git_describe = None
 git_describe_v = None
@@ -97,13 +98,15 @@ def do_make(target=None, log=False):
     if silent:
         make_args += "-s "
     make_args += "ARCH=%s " %arch
+    if cc_path:
+        make_args += "CC=%s " %cc_path
     if cross_compile:
         make_args += "CROSS_COMPILE=%s " %cross_compile
     if ccache:
         prefix = ''
         if cross_compile:
             prefix = cross_compile
-        make_args += 'CC="ccache %sgcc" ' %prefix
+        make_args += 'CC="ccache %s%s" ' % (prefix, cc_path)
     if kbuild_output:
         make_args += "O=%s " %kbuild_output
     if target:
@@ -153,6 +156,10 @@ if os.environ.has_key('ARCH'):
     arch = os.environ['ARCH']
 else:
     os.environ['ARCH'] = arch
+
+# CC
+if os.environ.has_key('CC'):
+    cc_path = os.environ['CC']
 
 try:
     opts, args = getopt.getopt(sys.argv[1:], "b:c:ip:sge")
@@ -272,9 +279,9 @@ if use_environment:
     git_describe = os.environ.get('GIT_DESCRIBE', git_describe)
     git_describe_v = os.environ.get('GIT_DESCRIBE_VERBOSE', git_describe_v)
 
-cc_cmd = "gcc -v 2>&1"
+cc_cmd = "%s -v 2>&1" % cc_path
 if cross_compile:
-    cc_cmd = "%sgcc -v 2>&1" %cross_compile
+    cc_cmd = "%s%s -v 2>&1" % (cross_compile, cc_path)
 gcc_version = subprocess.check_output(cc_cmd, shell=True).splitlines()[-1]
 
 start_time = time.time()
