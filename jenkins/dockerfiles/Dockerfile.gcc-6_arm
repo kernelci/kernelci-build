@@ -1,0 +1,11 @@
+FROM builder_base:latest
+MAINTAINER "Matt Hart" <matt@mattface.org>
+
+RUN apt-get -y install gcc-6-arm-linux-gnueabihf
+RUN update-alternatives --install /usr/bin/arm-linux-gnueabihf-gcc arm-linux-gnueabihf-gcc /usr/bin/arm-linux-gnueabihf-gcc-6 500
+RUN update-alternatives --install /usr/bin/arm-linux-gnueabihf-ar arm-linux-gnueabihf-ar /usr/bin/arm-linux-gnueabihf-gcc-ar-6 500
+RUN update-alternatives --install /usr/bin/arm-linux-gnueabihf-nm arm-linux-gnueabihf-nm /usr/bin/arm-linux-gnueabihf-gcc-nm-6 500
+RUN update-alternatives --install /usr/bin/arm-linux-gnueabihf-ranlib arm-linux-gnueabihf-ranlib /usr/bin/arm-linux-gnueabihf-gcc-ranlib-6 500
+RUN update-alternatives --install /usr/bin/arm-linux-gnueabihf-gcov arm-linux-gnueabihf-gcov /usr/bin/arm-linux-gnueabihf-gcov-6 500
+RUN update-alternatives --install /usr/bin/arm-linux-gnueabihf-gcov-dump arm-linux-gnueabihf-gcov-dump /usr/bin/arm-linux-gnueabihf-gcov-dump-6 500
+RUN update-alternatives --install /usr/bin/arm-linux-gnueabihf-gcov-tool arm-linux-gnueabihf-gcov-tool /usr/bin/arm-linux-gnueabihf-gcov-tool-6 500
