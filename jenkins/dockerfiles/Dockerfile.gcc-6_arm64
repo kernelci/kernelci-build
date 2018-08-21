@@ -1,0 +1,11 @@
+FROM builder_base:latest
+MAINTAINER "Matt Hart" <matt@mattface.org>
+
+RUN apt-get -y install gcc-6-aarch64-linux-gnu
+RUN update-alternatives --install /usr/bin/aarch64-linux-gnu-gcc aarch64-linux-gnu-gcc /usr/bin/aarch64-linux-gnu-gcc-6 500
+RUN update-alternatives --install /usr/bin/aarch64-linux-gnu-ar aarch64-linux-gnu-ar /usr/bin/aarch64-linux-gnu-gcc-ar-6 500
+RUN update-alternatives --install /usr/bin/aarch64-linux-gnu-nm aarch64-linux-gnu-nm /usr/bin/aarch64-linux-gnu-gcc-nm-6 500
+RUN update-alternatives --install /usr/bin/aarch64-linux-gnu-ranlib aarch64-linux-gnu-ranlib /usr/bin/aarch64-linux-gnu-gcc-ranlib-6 500
+RUN update-alternatives --install /usr/bin/aarch64-linux-gnu-gcov aarch64-linux-gnu-gcov /usr/bin/aarch64-linux-gnu-gcov-6 500
+RUN update-alternatives --install /usr/bin/aarch64-linux-gnu-gcov-dump aarch64-linux-gnu-gcov-dump /usr/bin/aarch64-linux-gnu-gcov-dump-6 500
+RUN update-alternatives --install /usr/bin/aarch64-linux-gnu-gcov-tool aarch64-linux-gnu-gcov-tool /usr/bin/aarch64-linux-gnu-gcov-tool-6 500

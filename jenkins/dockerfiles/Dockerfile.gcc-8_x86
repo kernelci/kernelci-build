@@ -1,0 +1,5 @@
+FROM builder_base:latest
+MAINTAINER "Matt Hart" <matt@mattface.org>
+
+RUN apt-get -y install gcc-8
+RUN update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-8 500
